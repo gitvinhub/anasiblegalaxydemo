@@ -1,29 +1,27 @@
-## WordPress+Nginx+PHP-FPM Deployment
+Building a simple LAMP stack and deploying Application using Ansible Playbooks.
+-------------------------------------------
 
-- Requires Ansible 1.2 or newer
-- Expects CentOS/RHEL 6.x hosts
+These playbooks require Ansible 1.2.
 
-These playbooks deploy a simple all-in-one configuration of the popular
-WordPress blogging platform and CMS, frontend by the Nginx web server and the
-PHP-FPM process manager. To use, copy the `hosts.example` file to `hosts` and 
-edit the `hosts` inventory file to include the names or URLs of the servers
-you want to deploy.
+These playbooks are meant to be a reference and starter's guide to building
+Ansible Playbooks. These playbooks were tested on CentOS 6.x so we recommend
+that you use CentOS or RHEL to test these modules.
 
-Then run the playbook, like this:
+This LAMP stack can be on a single node or multiple nodes. The inventory file
+'hosts' defines the nodes in which the stacks should be configured.
 
-	ansible-playbook -i hosts site.yml
+        [webservers]
+        localhost
 
-The playbooks will configure MySQL, WordPress, Nginx, and PHP-FPM. When the run
-is complete, you can hit access server to begin the WordPress configuration.
+        [dbservers]
+        bensible
 
-### Ideas for Improvement
+Here the webserver would be configured on the local host and the dbserver on a
+server called `bensible`. The stack can be deployed using the following
+command:
 
-Here are some ideas for ways that these playbooks could be extended:
+        ansible-playbook -i hosts site.yml
 
-- Parameterize the WordPress deployment to handle multi-site configurations.
-- Separate the components (PHP-FPM, MySQL, Nginx) onto separate hosts and 
-handle the configuration appropriately.
-- Handle WordPress upgrades automatically.
-
-We would love to see contributions and improvements, so please fork this
-repository on GitHub and send us your changes via pull requests.
+Once done, you can check the results by browsing to http://localhost/index.php.
+You should see a simple test page and a list of databases retrieved from the
+database server.

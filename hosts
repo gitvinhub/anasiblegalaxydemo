@@ -1,2 +1,5 @@
-[wordpress-server]
-172.16.0.253
+[webservers]
+web3
+
+[dbservers]
+web2

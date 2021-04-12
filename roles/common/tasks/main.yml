@@ -1,16 +1,27 @@
 ---
-- name: Install libselinux-python
-  yum: name=libselinux-python state=present
+# This playbook contains common plays that will be run on all nodes.
 
-- name: Reload ansible_facts
-  setup:
+- name: Install ntp
+  yum:
+    name: ntp
+    state: present
+  tags: ntp
 
-- name: Copy the EPEL repository definition
-  copy: src=epel.repo dest=/etc/yum.repos.d/epel.repo
+- name: Configure ntp file
+  template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
+  tags: ntp
+  notify: restart ntp
 
-- name: Create the GPG key for EPEL
-  copy: src=RPM-GPG-KEY-EPEL-6 dest=/etc/pki/rpm-gpg
+- name: Start the ntp service
+  service:
+    name: ntpd
+    state: started
+    enabled: yes
+  tags: ntp
 
-- name: Set up iptables rules
-  copy: src=iptables-save dest=/etc/sysconfig/iptables
-  notify: restart iptables
+- name: test to see if selinux is running
+  command: getenforce
+  register: sestatus
+  changed_when: false
